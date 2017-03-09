@@ -112,9 +112,10 @@ for file_name in glob.glob('*.xlsx'):
                     if col_idx == end_col_idx:
                         if args.is_all_mult and row_idx > start_row_idx + 2:
                             try:
-                                value = float(row[area_col_idx].value) / ALL_MULTS[str(row[start_col_idx].value)]
+                                area_value = float(row[area_col_idx].value)
                             except ValueError:
-                                raise Exception('counts*min is not number for %s' % str(row[start_col_idx].value))
+                                area_value = 0
+                            value = area_value / ALL_MULTS[str(row[start_col_idx].value)]
                         elif value == 'n.a.':
                             if row[area_col_idx].value != 'n.a.':
                                 if args.is_mult:
