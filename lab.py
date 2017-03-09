@@ -86,12 +86,12 @@ for file_name in glob.glob('*.xlsx'):
                         break
             elif row_idx == len(list(ws.rows)) - 1:
                 end_row_idx = row_idx
-            else:
+            elif row_idx > start_row_idx + 2:
                 for col_idx in range(len(row)):
-                    cell = row[col_idx]
-                    if row_idx > start_row_idx + 2 and col_idx == end_col_idx and cell.value is None:
-                        end_row_idx = row_idx - 1
+                    if row[col_idx].value is not None:
                         break
+                else:
+                    end_row_idx = row_idx - 1
             if start_row_idx > -1 and start_col_idx > -1 and end_row_idx > -1 and end_col_idx > -1:
                 break
         else:
@@ -104,7 +104,7 @@ for file_name in glob.glob('*.xlsx'):
         for row_idx in range(start_row_idx, end_row_idx + 1):
             row = list(ws.rows)[row_idx]
             acid_name = row[start_col_idx].value
-            if acid_name is not None and acid_name != '':
+            if acid_name is not None and acid_name in acid_list:
                 new_row = []
                 for col_idx in range(start_col_idx, end_col_idx + 1):
                     cell = row[col_idx]
