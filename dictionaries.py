@@ -113,7 +113,11 @@ def get_parameters_from_file(data_file_name: str) -> dict:
     result = {}
     wb = load_workbook(data_file_name)
     ws = wb.get_sheet_by_name('Parameters')
-    key = str(list(ws.rows)[1][0].value)
-    value = list(ws.rows)[1][1].value
-    result[key] = value
+    for row_idx in range(len(list(ws.rows))):
+        row = list(ws.rows)[row_idx]
+        key = row[0].value
+        value = row[1].value
+        if key is None or key == '':
+            break
+        result[key] = value
     return result

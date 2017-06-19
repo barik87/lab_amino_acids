@@ -52,6 +52,7 @@ total_wb = Workbook()
 total_ws = total_wb.active
 acids_row = [''] + acid_list
 total_ws.append(acids_row)
+corrected_acids = set()
 
 for file_name in glob.glob('*.xlsx'):
     if 'results' not in file_name and file_name != DATA_FILE_NAME:
@@ -124,6 +125,11 @@ for file_name in glob.glob('*.xlsx'):
                                     value = row[area_col_idx].value
                             else:
                                 value = 0
+                        if str(PARAMETERS['CorrectResults']).lower() == 'yes' and row_idx > start_row_idx + 2:
+                            divider = float(PARAMETERS[str(row[start_col_idx].value) + 'Divider'])
+                            if divider != 1.0:
+                                value = value / divider
+                                corrected_acids.add(str(row[start_col_idx].value))
                         if type(value) in [int, float]:
                             value = value * PARAMETERS['Multiplier']
                         if data['Type'] == 'Urine' and value != 'n.a.' and row_idx > start_row_idx + 2:
@@ -217,3 +223,8 @@ for file_name in glob.glob('*.xlsx'):
 total_file_name = 'total_results.xlsx'
 total_wb.save(filename=total_file_name)
 print('\nFile %s generated.' % total_file_name)
+
+if str(PARAMETERS['CorrectResults']).lower() == 'yes':
+    print('\n======================================= ATTENTION =======================================')
+    print('!!! Results were corrected: %s !!!' % ', '.join(corrected_acids))
+    print('======================================= ATTENTION =======================================')
