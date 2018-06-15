@@ -55,7 +55,7 @@ total_ws.append(acids_row)
 corrected_acids = set()
 
 for file_name in glob.glob('*.xlsx'):
-    if 'results' not in file_name and file_name != DATA_FILE_NAME:
+    if 'results' not in file_name and not file_name.endswith(DATA_FILE_NAME):
         print('\nWorking with file "%s"...' % file_name)
 
         file_id = file_name.split('.')[0]
